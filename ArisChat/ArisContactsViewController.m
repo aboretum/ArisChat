@@ -37,6 +37,16 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 {
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor whiteColor];
+    
+    //Add contact label
+    UILabel *contactLabel = [[UILabel alloc] initWithFrame:CGRectMake((ScreenWidth-70)/2,25,70,86)];
+    contactLabel.text = [NSString stringWithFormat:@"Contacts"];
+    contactLabel.backgroundColor = [UIColor clearColor];
+    contactLabel.font =   [UIFont fontWithName:@"Helvetica-Bold" size:16.0];
+    contactLabel.textColor = [UIColor blackColor] ;
+    [self.view addSubview:contactLabel];
+
+    
     self.mtableView = [[UITableView alloc] initWithFrame:CGRectMake(0,86,ScreenWidth,ScreenHeight - 86) style:UITableViewStylePlain];
     
     self.mtableView .delegate=self;

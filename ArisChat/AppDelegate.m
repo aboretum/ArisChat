@@ -26,6 +26,7 @@
 #import "ArisSignInViewController.h"
 #import "KeychainItemWrapper.h"
 #import "ArisChatOverViewController.h"
+#import "ArisSettingViewController.h"
 
 
 // Log levels: off, error, warn, info, verbose
@@ -41,6 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     ArisContactsViewController *contactsViewController;
     ViewController *viewController;
     ArisChatOverViewController *chatOverViewController;
+    ArisSettingViewController *settingViewController;
     
 }
 @property (nonatomic, strong) XMPPStream *xmppStream;
@@ -110,7 +112,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
     if (![self connect])
     {
-        
         signinViewController= [[ArisSignInViewController alloc]init];
         signinViewController.delegate=self;
         [self.navigationController pushViewController:signinViewController animated:NO];
@@ -585,9 +586,12 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             imgNode.position = CGPointMake(CGRectGetMidX(myScene.frame), CGRectGetMidY(myScene.frame));
             imgNode.size = CGSizeMake(100, 100);
             
-            NSString *particlePath = [[NSBundle mainBundle] pathForResource:@"MyParticle" ofType:@"sks"];
+            NSString *particlePath;
+            
+            particlePath = [[NSBundle mainBundle] pathForResource:@"Halo2" ofType:@"sks"];
+          
             SKEmitterNode *emitterNode = [NSKeyedUnarchiver unarchiveObjectWithFile:particlePath];
-            emitterNode.position = CGPointMake(CGRectGetMidX(myScene.frame), CGRectGetMidY(myScene.frame)-18);
+            emitterNode.position = CGPointMake(CGRectGetMidX(myScene.frame), CGRectGetMidY(myScene.frame));
             
             [myScene addChild:emitterNode];
             
@@ -737,6 +741,12 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             chatOverViewController = [[ArisChatOverViewController alloc]init];
             [self.navigationController pushViewController:chatOverViewController animated:YES];
             
+        }
+        else if([item.controllerTAG isEqualToString:kMenuSettingsTag])
+        {
+            //allocate the View Controller
+            settingViewController = [[ArisSettingViewController alloc]init];
+            [self.navigationController pushViewController:settingViewController animated:YES];
         }
     }
 }

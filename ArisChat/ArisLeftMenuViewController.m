@@ -6,11 +6,6 @@
 //  Copyright (c) 2014 Wuchen Wang. All rights reserved.
 //
 
-//
-//  SideMenuViewController.m
-//
-//  Created by Peter van de Put
-//  Copyright (c) 2013 Peter van de Put. All rights reserved.
 
 #import "ArisLeftMenuViewController.h"
 #import "ArisHelper.h"

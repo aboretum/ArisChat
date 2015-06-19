@@ -122,23 +122,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     circleButton.layer.borderColor=[UIColor clearColor].CGColor;
     circleButton.layer.borderWidth = 0.5;
     [self.sendView addSubview:circleButton];
-    
-    
-    /*
-    UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,77,36)];
-    sendLabel.backgroundColor=[UIColor clearColor];
-    sendLabel.textAlignment = NSTextAlignmentCenter;
-    sendLabel.font=[UIFont systemFontOfSize:14];
-    sendLabel.textColor=[UIColor whiteColor];
-    sendLabel.text = @"Home";
-    sendLabel.adjustsFontSizeToFitWidth=YES;
-    sendLabel.autoresizingMask=UIViewAutoresizingFlexibleTopMargin;
-    
-    [sendButton addSubview:sendLabel];
-    sendLabel.text = @"Eat";
-    [sendButton2 addSubview:sendLabel];
-     */
-    
+  
     [self.view addSubview:self.sendView];
     
 }
