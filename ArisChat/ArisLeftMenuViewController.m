@@ -23,7 +23,6 @@
 
 
 @property(nonatomic,strong) UITableView* mTableView;
-@property(nonatomic,strong) UITableView* centerTableView;
 @property(nonatomic,strong) PaperFoldView* paperFoldView;
 
 @end
@@ -31,17 +30,16 @@
 @implementation ArisLeftMenuViewController
 
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor=[UIColor whiteColor];
-    self.mTableView = [[UITableView alloc]initWithFrame:CGRectMake(0,66,[self.view bounds].size.width,[[UIScreen mainScreen] bounds].size.height - 60) style:UITableViewStylePlain];
+    self.view.backgroundColor=[ArisHelper colorWithHexString:@"FBF6E9"];
+    self.mTableView = [[UITableView alloc]initWithFrame:CGRectMake(0,0,[self.view bounds].size.width,[[UIScreen mainScreen] bounds].size.height) style:UITableViewStylePlain];
     self.mTableView.delegate=self;
     self.mTableView.dataSource=self;
-    self.mTableView.rowHeight=70;
-    self.mTableView.backgroundColor=[UIColor whiteColor];
+    self.mTableView.rowHeight= [self menuItemHeight];
+    self.mTableView.backgroundColor=[UIColor clearColor];
     self.mTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
    
    
@@ -51,24 +49,24 @@
     CALayer *sublayer = [CALayer layer];
     sublayer.shadowOffset = CGSizeMake(0, 3);
     sublayer.shadowRadius = 5.0;
-    sublayer.backgroundColor=[UIColor blackColor].CGColor;
-    sublayer.shadowColor = [UIColor blackColor].CGColor;
+    sublayer.backgroundColor=[UIColor whiteColor].CGColor;
+    sublayer.shadowColor = [UIColor whiteColor].CGColor;
     sublayer.shadowOpacity = 1.0;
     sublayer.frame = CGRectMake(tablewidth-3, 0, 4, [[UIScreen mainScreen] bounds].size.height);
     [self.view.layer addSublayer:sublayer];
     
     
-    self.paperFoldView = [[PaperFoldView alloc] initWithFrame:CGRectMake(0,0,[self.view bounds].size.width,[self.view bounds].size.height)];
+    self.paperFoldView = [[PaperFoldView alloc] initWithFrame:CGRectMake(0,20,[self.view bounds].size.width,[self.view bounds].size.height-20)];
     [self.view addSubview:_paperFoldView];
     
-    [self.paperFoldView setTopFoldContentView:self.mTableView topViewFoldCount:3 topViewPullFactor:0.9];
-    
-  
-   
+    [self.paperFoldView setTopFoldContentView:self.mTableView topViewFoldCount:3 topViewPullFactor:1.5];
     
 }
 
-
+- (CGFloat)menuItemHeight
+{
+    return (ScreenHeight-20)/self.menuItems.count;
+}
 
 
 #pragma mark table view delegates
@@ -86,10 +84,10 @@
         
         ArisMenuItem* item = [self.menuItems objectAtIndex:indexPath.row];
         
-        UIView *cellContentView = [[UIView alloc] initWithFrame:CGRectMake(0,0,tablewidth,40)];
+        UIView *cellContentView = [[UIView alloc] initWithFrame:CGRectMake(0,0,tablewidth,[self menuItemHeight])];
         cellContentView.backgroundColor=[UIColor clearColor];
-        UIImage *bgImage = [[UIImage imageNamed:@"torn-paper.jpg"] stretchableImageWithLeftCapWidth:0  topCapHeight:15];
-        UIImageView *paperHolder = [[UIImageView alloc] initWithFrame:CGRectMake(50,0,tablewidth,70)];
+        UIImage *bgImage = [[UIImage imageNamed:@"torn-paper.png"] stretchableImageWithLeftCapWidth:0  topCapHeight:15];
+        UIImageView *paperHolder = [[UIImageView alloc] initWithFrame:CGRectMake(50,0,tablewidth,[self menuItemHeight])];
         paperHolder.image = bgImage;
         [cellContentView addSubview:paperHolder];
         
@@ -104,10 +102,10 @@
         
         
         
-        UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100,15,tablewidth -50,40)];
+        UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100,[self menuItemHeight]/2-20,tablewidth -50,40)];
         titleLabel.textColor=[ArisHelper colorWithHexString:item.textColorHexString];
         titleLabel.backgroundColor=[UIColor clearColor];
-        [titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:15.0]];
+        [titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
         
         titleLabel.text = item.menuTitle;
         [cellContentView addSubview:titleLabel];

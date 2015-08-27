@@ -27,7 +27,7 @@
 #import "KeychainItemWrapper.h"
 #import "ArisChatOverViewController.h"
 #import "ArisSettingViewController.h"
-
+#import "CustomIOSAlertView.h"
 
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -110,12 +110,28 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     //
     
     
+    
     if (![self connect])
     {
         signinViewController= [[ArisSignInViewController alloc]init];
         signinViewController.delegate=self;
         [self.navigationController pushViewController:signinViewController animated:NO];
     }
+    
+    
+    // Let the device know we want to receive push notifications
+    //This code will work in iOS 8.0 xcode 6.0 or later
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeNewsstandContentAvailability| UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    }
+    
     
     return YES;
 }
@@ -172,7 +188,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         //        If you do enableBackgroundingOnSocket on the simulator,
         //        you will simply see an error message from the xmpp stack when it fails to set the property.
         
-        xmppStream.enableBackgroundingOnSocket = YES;
+        _xmppStream.enableBackgroundingOnSocket = YES;
 	}
 #endif
 	
@@ -344,13 +360,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 		return YES;
 	}
     NSString *myJID = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyJID];
+    NSLog(@"%@",myJID);
     KeychainItemWrapper* keychain = [[KeychainItemWrapper alloc] initWithIdentifier:@"ArisCHAT" accessGroup:nil];
  	NSString *myPassword = [keychain objectForKey:(__bridge id)kSecValueData];
-    userPassword = @"demo";
-    
-	
-	myJID = @"demo@openfire.yourdeveloper.net";
-    
+    userPassword = myPassword;
 	
 	if (myJID == nil || myPassword == nil) {
 		return NO;
@@ -536,7 +549,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     chat.isGroupMessage=[NSNumber numberWithBool:NO];
     chat.jidString = user.jidStr;
     NSError *error = nil;
-    NSLog(@"datasaved");
     if (![self.managedObjectContext save:&error])
     {
         NSLog(@"error saving");
@@ -558,20 +570,15 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
                                                             managedObjectContext:[self managedObjectContext_roster]];
 		
 		NSString *body = [[message elementForName:@"body"] stringValue];
-		NSString *displayName = [user displayName];
         
-		if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+        // XMPP server will always send queued messages when user is present again.
         {
-			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Message from %@", displayName]
-                                                                message:nil
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
             
+            CustomIOSAlertView * calertView = [[CustomIOSAlertView alloc]init];
+            
+            SKView *msgView = [[SKView alloc] initWithFrame:CGRectMake(0, 0, 260, 260)];
             SKScene *myScene = [[SKScene alloc] initWithSize:CGSizeMake(100, 100)];
             myScene.scaleMode = SKSceneScaleModeAspectFill;
-            
-            SKView *msgView = [[SKView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
             
             //Node for image
             SKSpriteNode *imgNode;
@@ -608,25 +615,18 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             //msgView.showsNodeCount = YES;
             
             //UIColor *globalTint = [[[UIApplication sharedApplication] delegate] window].tintColor;
-            myScene.backgroundColor = [SKColor colorWithRed:247/255.0f green:247/255.0f blue:247/255.0f alpha:1.0f];
+            myScene.backgroundColor = [SKColor clearColor];
             msgView.backgroundColor = [SKColor clearColor];
+            msgView.allowsTransparency = YES;
             msgView.layer.cornerRadius = 0.5f;
             [msgView presentScene:myScene];
             
-            [alertView setValue:msgView forKey:@"accessoryView"] ;
-            
-            [alertView show];
+            [calertView setContainerView:msgView];
+            [calertView setButtonTitles:@[@"Dismiss"]];
+            calertView.useMotionEffects = YES;
+            [calertView show];
             
             [self updateCoreDataWithIncomingMessage:message];
-        }
-		else
-        {
-			// We are not active, so use a local notification instead
-			UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-			localNotification.alertAction = @"Ok";
-			localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
-            
-			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
         }
     }
 }

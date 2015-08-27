@@ -40,8 +40,6 @@
     UIImage *img = [UIImage imageNamed:@"dog2.jpg"];
     imgHolder = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,[self.view bounds].size.width, [self.view bounds].size.height)];
     tailHolder = [[UIImageView alloc] initWithFrame:CGRectMake([self.view bounds].size.width*0.09375,[self.view bounds].size.height*0.572916,[self.view bounds].size.width*0.766*0.3, [self.view bounds].size.height*0.427*0.2)];
-    //NSLog(@"%f", [self.view bounds].size.width);
-    //NSLog(@"%f", [self.view bounds].size.height);
     imgHolder.image = img;
     tailHolder.image = tail;
     [self.view addSubview:imgHolder];

@@ -77,7 +77,6 @@
     {
         Account *thisAccount = (Account *)obj;
         self.text = thisAccount.allowText;
-        NSLog(@"text status set %@",thisAccount.allowText);
     }
     
     //Save changes
@@ -87,6 +86,8 @@
         NSLog(@"error saving");
     }
     
+    NSLog(@"saved user default %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"chattingStyleSetting"]);
+    self.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"chattingStyleSetting"];
     if(self.text){
         self.textAndImage.accessoryType = UITableViewCellAccessoryCheckmark;
         self.ImageOnly.accessoryType = UITableViewCellAccessoryNone;
@@ -162,6 +163,7 @@
     }
     
     account.allowText = self.text;
+    [[NSUserDefaults standardUserDefaults] setObject:self.text forKey:@"chattingStyleSetting"];
     
     if (![[self appDelegate].managedObjectContext save:&error])
     {

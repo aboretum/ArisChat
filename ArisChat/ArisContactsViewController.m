@@ -1,9 +1,9 @@
 //
-//  ArisContactsViewController.m
+//  ArisContactsViewController.h
 //  ArisChat
 //
-//  Created by Peter van de Put on 09/12/2013.
-//  Copyright (c) 2013 YourDeveloper. All rights reserved.
+//  Created by Wuchen Wang on 9/18/14.
+//  Copyright (c) 2014 Wuchen Wang. All rights reserved.
 //
 
 #import "ArisContactsViewController.h"
@@ -12,6 +12,8 @@
 #import "DDLog.h"
 #import "ArisConversationViewController.h"
 #import "ArisAddContactsViewController.h"
+#import "ArisImageOnlyConversationViewController.h"
+#import "ArisTextAndImageConversationViewController.h"
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
@@ -278,7 +280,12 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     if (self.conversationVC)
         self.conversationVC = nil;
     
-    self.conversationVC = [[ArisConversationViewController alloc]init];
+    if([[NSUserDefaults standardUserDefaults] valueForKey:@"chattingStyleSetting"]){
+        self.conversationVC = [[ArisTextAndImageConversationViewController alloc]init];
+    }else{
+        self.conversationVC = [[ArisImageOnlyConversationViewController alloc]init];
+    }
+    
     [self.conversationVC showConversationForJIDString:user.jidStr];
     [self.navigationController pushViewController:self.conversationVC animated:YES];
 

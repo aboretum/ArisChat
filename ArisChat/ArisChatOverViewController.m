@@ -5,6 +5,8 @@
 #import "ArisChatOverViewController.h"
 #import "AppDelegate.h"
 #import "ArisConversationViewController.h"
+#import "ArisTextAndImageConversationViewController.h"
+#import "ArisImageOnlyConversationViewController.h"
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
@@ -123,6 +125,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
     
     
+    
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                   reuseIdentifier:CellIdentifier];
     
@@ -158,10 +161,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         
         
         if([chat.messageID isEqualToString:@"Aris1"]){
-            imageView.image = [UIImage imageNamed:@"home1.jpg"] ;
+            imageView.image = [UIImage imageNamed:@"home1.png"] ;
             
         }else if([chat.messageID isEqualToString:@"Aris2"]){
-            imageView.image = [UIImage imageNamed:@"eat.jpg"] ;
+            imageView.image = [UIImage imageNamed:@"eat.png"] ;
             
         }
         
@@ -256,7 +259,12 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     if (self.conversationVC)
         self.conversationVC = nil;
     Chat* chat = [self.chats objectAtIndex:indexPath.row];
-    self.conversationVC = [[ArisConversationViewController alloc]init];
+    if([[NSUserDefaults standardUserDefaults] valueForKey:@"chattingStyleSetting"]){
+        self.conversationVC = [[ArisTextAndImageConversationViewController alloc]init];
+    }else{
+        self.conversationVC = [[ArisImageOnlyConversationViewController alloc]init];
+    }
+    
     [self.conversationVC showConversationForJIDString:chat.jidString];
     [self.navigationController pushViewController:self.conversationVC animated:YES];
     

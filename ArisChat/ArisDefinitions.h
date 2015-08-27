@@ -19,6 +19,7 @@ static const float tablewidth = 270.0f;
 #define kMenuChatsTag       @"kMenuChatsTag"
 #define kMenuGroupChatTag   @"kMenuGroupChatTag"
 #define kMenuSettingsTag    @"kMenuSettingsTag"
+#define kChatSettingTag    @"chattingStyleSetting"
 
 
 #define kXMPPmyJID              @"kXMPPmyJID"

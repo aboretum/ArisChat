@@ -69,14 +69,14 @@
 {
     _useOptimizedScreenshot = YES;
     
-    [self setBackgroundColor:[UIColor darkGrayColor]];
+    [self setBackgroundColor:[UIColor clearColor]];
     [self setAutoresizesSubviews:YES];
     [self setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     
     _contentView = [[TouchThroughUIView alloc] initWithFrame:CGRectMake(0,0,self.frame.size.width,self.frame.size.height)];
     [_contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self addSubview:_contentView];
-    [_contentView setBackgroundColor:[UIColor whiteColor]];
+    [_contentView setBackgroundColor:[UIColor clearColor]];
     [_contentView setAutoresizesSubviews:YES];
     
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onContentViewPanned:)];

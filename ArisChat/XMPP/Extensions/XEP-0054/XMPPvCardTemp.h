@@ -115,6 +115,6 @@ extern NSString *const kXMPPvCardTempElement;
 - (void)addEmailAddress:(XMPPvCardTempEmail *)email;
 - (void)removeEmailAddress:(XMPPvCardTempEmail *)email;
 - (void)clearEmailAddresses;
-
+- (void)setPhoto:(NSData *)photo;
 
 @end

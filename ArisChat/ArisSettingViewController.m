@@ -11,7 +11,7 @@
 #import "AppDelegate.h"
 #import "DDLog.h"
 #import "ArisChattingStyleSettingViewController.h"
-
+#import "ArisProfileSettingViewController.h"
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
@@ -25,6 +25,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 }
 
 @property (nonatomic,strong) ArisChattingStyleSettingViewController *cssvc;
+@property (nonatomic,strong) ArisProfileSettingViewController *psvc;
 @property (nonatomic,strong) UITableView *mtableView;
 @property (nonatomic,strong) UITableViewCell *profile;
 @property (nonatomic,strong) UITableViewCell *chattingStyle;
@@ -158,6 +159,8 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     };
 }
 
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch(indexPath.section)
@@ -192,8 +195,13 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         case 0:
             switch(indexPath.row)
         {
-            case 0: NSLog(@"Section 0 row 0 selected");  // section 0, row 0 is profile
-                
+            case 0:
+                NSLog(@"Section 0 row 0 selected");  // section 0, row 0 is profile
+                if(self.psvc){
+                    self.psvc = nil;
+                }
+                self.psvc = [[ArisProfileSettingViewController alloc] init];
+                [self.navigationController pushViewController:self.psvc animated:YES];
         }
             break;
         case 1:
