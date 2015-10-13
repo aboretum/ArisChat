@@ -16,9 +16,8 @@
 
 
 @interface ArisLeftMenuViewController()<UITableViewDataSource,UITableViewDelegate>
-
 {
-    
+
 }
 
 
@@ -85,7 +84,7 @@
         ArisMenuItem* item = [self.menuItems objectAtIndex:indexPath.row];
         
         UIView *cellContentView = [[UIView alloc] initWithFrame:CGRectMake(0,0,tablewidth,[self menuItemHeight])];
-        cellContentView.backgroundColor=[UIColor clearColor];
+        cellContentView.backgroundColor= [ArisHelper colorWithHexString:@"FBF6E9"];
         UIImage *bgImage = [[UIImage imageNamed:@"torn-paper.png"] stretchableImageWithLeftCapWidth:0  topCapHeight:15];
         UIImageView *paperHolder = [[UIImageView alloc] initWithFrame:CGRectMake(50,0,tablewidth,[self menuItemHeight])];
         paperHolder.image = bgImage;
@@ -93,7 +92,7 @@
         
         if ([item.imageName length] >0)
         {
-            UIImageView* imgView = [[UIImageView alloc] initWithFrame:CGRectMake(200,15,32,32)];
+            UIImageView* imgView = [[UIImageView alloc] initWithFrame:CGRectMake(220,([self menuItemHeight]-tablewidth*0.3)/2,tablewidth*0.3,tablewidth*0.3)];
             imgView.backgroundColor=[UIColor clearColor];
             imgView.image=[UIImage imageNamed:item.imageName];
             imgView.contentMode = UIViewContentModeScaleAspectFill;
@@ -106,11 +105,8 @@
         titleLabel.textColor=[ArisHelper colorWithHexString:item.textColorHexString];
         titleLabel.backgroundColor=[UIColor clearColor];
         [titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20.0]];
-        
         titleLabel.text = item.menuTitle;
         [cellContentView addSubview:titleLabel];
-        
-        
         
         //Adding a dropshadow. Not sure about size and radius
         [cell.layer setShadowColor:[[UIColor blackColor] CGColor]];

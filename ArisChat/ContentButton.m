@@ -19,10 +19,10 @@
         imageName = @"eat.png";
     }else if([content isEqualToString:@"home"]){
         imageName = @"home1.png";
-    }else if([content isEqualToString:@"drink"]){
-        imageName = @"eat.png";
-    }else if([content isEqualToString:@"work"]){
-        imageName = @"eat.png";
+    }else if([content isEqualToString:@"yes"]){
+        imageName = @"YES.png";
+    }else if([content isEqualToString:@"no"]){
+        imageName = @"NO.png";
     }
     
     [self setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];

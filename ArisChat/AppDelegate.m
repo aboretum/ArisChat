@@ -16,6 +16,7 @@
 #import "XMPPvCardAvatarModule.h"
 #import "XMPPvCardCoreDataStorage.h"
 #import "ArisContactsViewController.h"
+#import "NSXMLElement+XEP_0203.h"
 
 #import "DDLog.h"
 #import "DDTTYLogger.h"
@@ -85,10 +86,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     self.window.rootViewController = self.navigationController;
     //Create left menu
     ArisMenuItem* homeItem = [[ArisMenuItem alloc]initWithTitle:@"Home" backgroundColorHexString:@"008080" textColorHexString:@"0x663300" viewControllerTAG:kMenuHomeTag imageName:@""];
-    ArisMenuItem* item1 = [[ArisMenuItem alloc]initWithTitle:@"Chats" backgroundColorHexString:@"4682B4" textColorHexString:@"0x663300" viewControllerTAG:kMenuChatsTag imageName:@"chat"];
-    ArisMenuItem* item2 = [[ArisMenuItem alloc]initWithTitle:@"Contacts" backgroundColorHexString:@"40E0D0" textColorHexString:@"0x663300" viewControllerTAG:kMenuContactsTag imageName:@"contact"];
+    ArisMenuItem* item1 = [[ArisMenuItem alloc]initWithTitle:@"Chats" backgroundColorHexString:@"4682B4" textColorHexString:@"0x663300" viewControllerTAG:kMenuChatsTag imageName:@"setting2"];
+    ArisMenuItem* item2 = [[ArisMenuItem alloc]initWithTitle:@"Contacts" backgroundColorHexString:@"40E0D0" textColorHexString:@"0x663300" viewControllerTAG:kMenuContactsTag imageName:@"setting3"];
     ArisMenuItem* item3 = [[ArisMenuItem alloc]initWithTitle:@"Group chat" backgroundColorHexString:@"EE82EE" textColorHexString:@"0x663300" viewControllerTAG:kMenuGroupChatTag imageName:@"groupicon"];
-    ArisMenuItem* item4 = [[ArisMenuItem alloc]initWithTitle:@"Settings" backgroundColorHexString:@"6A5ACD" textColorHexString:@"0x663300" viewControllerTAG:kMenuSettingsTag imageName:@"settings"];
+    ArisMenuItem* item4 = [[ArisMenuItem alloc]initWithTitle:@"Settings" backgroundColorHexString:@"6A5ACD" textColorHexString:@"0x663300" viewControllerTAG:kMenuSettingsTag imageName:@"setting"];
     
     //create left menu Controller
     self.leftMenuViewController = [[ArisLeftMenuViewController alloc] init];
@@ -132,8 +133,25 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeNewsstandContentAvailability| UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
     
-    
     return YES;
+}
+
+#pragma push notification
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    NSLog(@"My token is: %@", deviceToken);
+    
+    NSString *newToken = [deviceToken description];
+    newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSLog(@"My token is: %@", newToken);
+    [[NSUserDefaults standardUserDefaults] setObject:newToken forKey:kDeviceToken];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+    NSLog(@"Failed to get token, error: %@", error);
 }
 
 -(void)credentialsStored
@@ -396,6 +414,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 - (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error
 {
+    DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
     DDLogError(@"Error connecting: %@", error);
 }
 - (void)disconnect
@@ -488,6 +507,24 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 	
 	[self goOnline];
+    
+    //Send token iq
+    NSString *tokenKey = [[NSUserDefaults standardUserDefaults] stringForKey:kDeviceToken];
+    if(tokenKey){
+        NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
+        [iq addAttributeWithName:@"id" stringValue:@"123456"];
+        [iq addAttributeWithName:@"type" stringValue:@"set"];
+        
+        NSXMLElement *query = [NSXMLElement elementWithName:@"query" xmlns:@"urn:xmpp:apns"];
+        NSXMLElement *token = [NSXMLElement elementWithName:@"token"];
+        [token setStringValue:tokenKey];
+        [query addChild:token];
+        [iq addChild:query];
+        
+        [self.xmppStream sendElement:iq];
+        NSLog(@"iq message sent");
+    }
+
 }
 
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
@@ -534,13 +571,20 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     XMPPUserCoreDataStorageObject *user = [self.xmppRosterStorage userForJID:[message from]
                                                                   xmppStream:self.xmppStream
                                                         managedObjectContext:[self managedObjectContext_roster]];
-	
+    
     Chat *chat = [NSEntityDescription
                   insertNewObjectForEntityForName:@"Chat"
                   inManagedObjectContext:self.managedObjectContext];
     chat.messageBody = [[message elementForName:@"body"] stringValue];
     chat.messageID = [[message elementForName:@"body"] stringValue];
-    chat.messageDate = [NSDate date];
+    
+    //Depending on the timestamp of the message, the date information of the message varies
+    if([message wasDelayed]){
+        chat.messageDate = [message delayedDeliveryDate];
+    }else{
+        chat.messageDate = [NSDate date];
+    }
+    
     chat.messageStatus=@"received";
     chat.direction = @"IN";
     chat.groupNumber=@"";
@@ -565,10 +609,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
 	if ([message isChatMessageWithBody])
     {
-		XMPPUserCoreDataStorageObject *user = [self.xmppRosterStorage userForJID:[message from]
-                                                                      xmppStream:self.xmppStream
-                                                            managedObjectContext:[self managedObjectContext_roster]];
-		
 		NSString *body = [[message elementForName:@"body"] stringValue];
         
         // XMPP server will always send queued messages when user is present again.
@@ -585,9 +625,12 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             
             if([body isEqualToString:@"Aris1"]){
                 imgNode = [SKSpriteNode spriteNodeWithImageNamed:@"home1.png"];
-                
             }else if([body isEqualToString:@"Aris2"]){
                 imgNode = [SKSpriteNode spriteNodeWithImageNamed:@"eat.png"];
+            }else if([body isEqualToString:@"Aris3"]){
+                imgNode = [SKSpriteNode spriteNodeWithImageNamed:@"YES.png"];
+            }else if([body isEqualToString:@"Aris4"]){
+                imgNode = [SKSpriteNode spriteNodeWithImageNamed:@"NO.png"];
             }
             
             imgNode.position = CGPointMake(CGRectGetMidX(myScene.frame), CGRectGetMidY(myScene.frame));

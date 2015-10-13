@@ -30,7 +30,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     [super viewDidLoad];
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     
-	self.view.backgroundColor=[UIColor whiteColor];
+	self.view.backgroundColor= [ArisHelper colorWithHexString:@"FBF6E9"];
     //Add chat label
     UILabel *chatLabel = [[UILabel alloc] initWithFrame:CGRectMake((ScreenWidth-50)/2,25,50,86)];
     chatLabel.text = [NSString stringWithFormat:@"Chats"];
@@ -40,7 +40,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     [self.view addSubview:chatLabel];
 
     //Add a UITableView
-    self.mtableView = [[UITableView alloc] initWithFrame:CGRectMake(0,86,ScreenWidth,ScreenHeight - 86-40) style:UITableViewStylePlain];
+    self.mtableView = [[UITableView alloc] initWithFrame:CGRectMake(0,86,ScreenWidth,ScreenHeight - 86) style:UITableViewStylePlain];
     self.mtableView.delegate=self;
     self.mtableView.dataSource=self;
     self.mtableView.rowHeight=86;
@@ -120,15 +120,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
-        
-       
     }
-    
-    
     
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                   reuseIdentifier:CellIdentifier];
-    
     
 	Chat* chat = [self.chats objectAtIndex:indexPath.row];
     
@@ -138,7 +133,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
                                                                        managedObjectContext:[self appDelegate ]. managedObjectContext_roster];
     
  	UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,60)];
-    bgView.backgroundColor=[UIColor clearColor];
+    bgView.backgroundColor=[ArisHelper colorWithHexString:@"FBF6E9"];
     if (![[chat isGroupMessage] boolValue])
     {
         UIImageView *avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(6,25,45,45)];
@@ -165,6 +160,12 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             
         }else if([chat.messageID isEqualToString:@"Aris2"]){
             imageView.image = [UIImage imageNamed:@"eat.png"] ;
+            
+        }else if([chat.messageID isEqualToString:@"Aris3"]){
+            imageView.image = [UIImage imageNamed:@"YES.png"] ;
+            
+        }else if([chat.messageID isEqualToString:@"Aris4"]){
+            imageView.image = [UIImage imageNamed:@"NO.png"] ;
             
         }
         
@@ -194,7 +195,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
             numberLabel.text=[NSString stringWithFormat:@"%i",[self countNewMessagesForJID:chat.jidString]];
             [bgView addSubview:numberLabel];
         }
-        if([chat.messageID isEqualToString:@"Aris1"]||[chat.messageID isEqualToString:@"Aris2"]){
+        if([chat.messageID isEqualToString:@"Aris1"]||[chat.messageID isEqualToString:@"Aris2"]||[chat.messageID isEqualToString:@"Aris3"]||[chat.messageID isEqualToString:@"Aris4"]){
             chat.messageBody = @"";
         }
         NSString *textForSecondLine = [NSString stringWithFormat:@"%@: %@",[ArisHelper dayLabelForMessage:chat.messageDate],chat.messageBody];

@@ -1,7 +1,7 @@
 //
 //  Macros.h
 //
-//  Created by Peter van de Put
+// 
 //
 
 // Constants

@@ -38,8 +38,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor=[UIColor whiteColor];
-    
+   
     //Add contact label
     UILabel *contactLabel = [[UILabel alloc] initWithFrame:CGRectMake((ScreenWidth-70)/2,25,70,86)];
     contactLabel.text = [NSString stringWithFormat:@"Contacts"];
@@ -47,7 +46,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     contactLabel.font =   [UIFont fontWithName:@"Helvetica-Bold" size:16.0];
     contactLabel.textColor = [UIColor blackColor] ;
     [self.view addSubview:contactLabel];
-
     
     self.mtableView = [[UITableView alloc] initWithFrame:CGRectMake(0,86,ScreenWidth,ScreenHeight - 86) style:UITableViewStylePlain];
     
@@ -59,18 +57,21 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     self.mtableView .backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.mtableView];
     //Add the invite button
-    UIButton* inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(3*(ScreenWidth)/4,82,70,30)];
+    UIButton* inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(0.7*(ScreenWidth),86,90,30)];
     inviteButton.backgroundColor=[UIColor clearColor];
     inviteButton.layer.cornerRadius = 5.0f;
+   
     [inviteButton addTarget:self action:@selector(inviteUser:) forControlEvents:UIControlEventTouchUpInside];
-    UILabel *inviteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,70,30)];
+    
+    UILabel *inviteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,90,30)];
     inviteLabel.backgroundColor=[UIColor clearColor];
-    [inviteLabel setFont:[UIFont systemFontOfSize:16]];
+    [inviteLabel setFont:[UIFont systemFontOfSize:18]];
     inviteLabel.text=@"Add Contact";
     inviteLabel.adjustsFontSizeToFitWidth=YES;
     inviteLabel.textAlignment=NSTextAlignmentCenter;
-    inviteLabel.textColor= [ArisHelper colorWithHexString:@"0x663300" ];
+    inviteLabel.textColor=[ArisHelper colorWithHexString:@"0x663300" ];
     [inviteButton addSubview:inviteLabel];
+    
     [self.view addSubview:inviteButton];
     
 }
@@ -80,10 +81,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     self.addContactsVC = [[ArisAddContactsViewController alloc] init];
     [self.addContactsVC setModalPresentationStyle:UIModalPresentationFullScreen];
     [self presentViewController:self.addContactsVC animated:YES completion:nil];
-    
-    //UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"Enter the user name" message:@"e.g peter" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-    //alert.alertViewStyle = UIAlertViewStylePlainTextInput ;
-    //[alert show];
 }
 
 
@@ -97,8 +94,8 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         NSLog(@"JID %@",jidString);
         [[self appDelegate] sendInvitationToJID:jidString withNickName:username.text];
     }
-    
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark NSFetchedResultsController
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

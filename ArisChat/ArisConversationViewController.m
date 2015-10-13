@@ -11,7 +11,6 @@
 #import "DDTTYLogger.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
-#import "SendView.h"
 #import "ContentButton.h"
 
 #if DEBUG
@@ -280,6 +279,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
                 messageID = [NSString stringWithFormat:@"Aris1"];
             }else if([button.type isEqualToString:@"eat"]){
                 messageID = [NSString stringWithFormat:@"Aris2"];
+            }else if([button.type isEqualToString:@"yes"]){
+                messageID = [NSString stringWithFormat:@"Aris3"];
+            }else if([button.type isEqualToString:@"no"]){
+                messageID = [NSString stringWithFormat:@"Aris4"];
             }
         }
     }

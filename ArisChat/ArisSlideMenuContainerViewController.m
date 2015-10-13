@@ -479,7 +479,7 @@ typedef enum {
 
 
 #pragma mark -
-#pragma mark - YDSLideMenuPanMode
+#pragma mark - ArisSLideMenuPanMode
 
 - (BOOL) centerViewControllerPanEnabled {
     return ((self.panMode & ArisSLideMenuPanModeCenterViewController) == ArisSLideMenuPanModeCenterViewController);

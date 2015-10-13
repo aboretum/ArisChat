@@ -13,6 +13,7 @@
 
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert;
 +(BOOL )createUser:(NSString *)username password:(NSString *)password name:(NSString *)name email:(NSString *)email;
++(int)createUserREST:(NSString *)username password:(NSString *)password name:(NSString *)name email:(NSString *)email;
 +(NSString *)dayLabelForMessage:(NSDate *)msgDate;
 @end
 

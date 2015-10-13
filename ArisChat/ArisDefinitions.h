@@ -20,15 +20,17 @@ static const float tablewidth = 270.0f;
 #define kMenuGroupChatTag   @"kMenuGroupChatTag"
 #define kMenuSettingsTag    @"kMenuSettingsTag"
 #define kChatSettingTag    @"chattingStyleSetting"
+#define kDeviceToken    @"kDeviceToken"
 
 
 #define kXMPPmyJID              @"kXMPPmyJID"
 #define kXMPPmyPassword         @"kXMPPmyPassword"
 
-#define kxmppHTTPRegistrationUrl    @"http://openfire.yourdeveloper.net:9090/plugins/userService/userservice?type=add&secret=V3q2GdGx&username=%@&password=%@&name=%@&email=%@"
+#define kxmppHTTPRegistrationUrl    @"http://ec2-52-27-140-159.us-west-2.compute.amazonaws.com:9090/plugins/userService/userservice?type=add&secret=WCBoUNA2&username=%@&password=%@&name=%@&email=%@"
+#define kxmppHTTPRegistrationUrlJson @"http://ec2-52-27-140-159.us-west-2.compute.amazonaws.com:9090/plugins/restapi/v1/users"
 
-#define kXMPPServer             @"openfire.yourdeveloper.net"
-#define kxmppProxyServer        @"openfire.yourdeveloper.net"
+#define kXMPPServer             @"ec2-52-27-140-159.us-west-2.compute.amazonaws.com"
+#define kxmppProxyServer        @"ec2-52-27-140-159.us-west-2.compute.amazonaws.com"
 #define kxmppConferenceServer   @"conference.openfire.yourdeveloper.net"
 #define kxmppSearchServer       @"search.openfire.yourdeveloper.net"
 

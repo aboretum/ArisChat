@@ -240,7 +240,7 @@
     
     UIImage *bgImage;
     UIImage *msgImage;
-    if([chat.messageBody isEqualToString:@"Aris1"]||[chat.messageBody isEqualToString:@"Aris2"]){
+    if([chat.messageBody isEqualToString:@"Aris1"]||[chat.messageBody isEqualToString:@"Aris2"]||[chat.messageBody isEqualToString:@"Aris3"]||[chat.messageBody isEqualToString:@"Aris4"]){
         chat.messageBody = @"";
     }
     if ([chat.messageBody isEqualToString:@""]) {
@@ -249,12 +249,16 @@
             
             if([chat.messageID isEqualToString:@"Aris1"]){
                 
-                msgImage = [UIImage imageNamed:@"home1.png"] ;
-                body.frame=CGRectMake(10,13,240.0,textHeight+5);
+                msgImage = [UIImage imageNamed:@"home1.png"];
             }else if([chat.messageID isEqualToString:@"Aris2"]){
-                                msgImage = [UIImage imageNamed:@"eat.png"] ;
-                body.frame=CGRectMake(10,13,240.0,textHeight+5);
+                msgImage = [UIImage imageNamed:@"eat.png"];
+            }else if([chat.messageID isEqualToString:@"Aris3"]){
+                msgImage = [UIImage imageNamed:@"YES.png"];
+            }else if([chat.messageID isEqualToString:@"Aris4"]){
+                msgImage = [UIImage imageNamed:@"NO.png"];
             }
+            
+            body.frame=CGRectMake(10,13,240.0,textHeight+5);
             
             senderLabel.frame=CGRectMake(ScreenWidth*0.2,ScreenWidth*0.21,textHeight*0.4,textHeight*0.4);
             senderLabel.text= [NSString stringWithFormat:@"%@",[ArisHelper dayLabelForMessage:chat.messageDate]];
@@ -264,14 +268,16 @@
         {
             //right aligned
             if([chat.messageID isEqualToString:@"Aris1"]){
-               
                 msgImage = [UIImage imageNamed:@"home1.png"] ;
-                body.frame=CGRectMake(45,13,240.0,textHeight+5);
             }else if([chat.messageID isEqualToString:@"Aris2"]){
-               
                 msgImage = [UIImage imageNamed:@"eat.png"] ;
-                body.frame=CGRectMake(45,13,240.0,textHeight+5);
+            }else if([chat.messageID isEqualToString:@"Aris3"]){
+                msgImage = [UIImage imageNamed:@"YES.png"];
+            }else if([chat.messageID isEqualToString:@"Aris4"]){
+                msgImage = [UIImage imageNamed:@"NO.png"];
             }
+            
+            body.frame=CGRectMake(45,13,240.0,textHeight+5);
             
             senderLabel.frame=CGRectMake(ScreenWidth*0.66,ScreenWidth*0.21,textHeight*0.4,textHeight*0.4);
             senderLabel.text= [NSString stringWithFormat:@"%@",[ArisHelper dayLabelForMessage:chat.messageDate]];

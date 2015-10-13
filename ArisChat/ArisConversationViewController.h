@@ -28,5 +28,6 @@
 -(void)shortenTableView;
 -(void)scrollToBottomAnimated:(BOOL)animated;
 -(void)loadData;
+-(IBAction)sendMessage:(id)sender;
 
 @end

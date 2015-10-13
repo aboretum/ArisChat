@@ -39,7 +39,7 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor=[UIColor whiteColor];
+    self.view.backgroundColor = [ArisHelper colorWithHexString:@"FBF6E9"];
     self.mtableView = [[UITableView alloc] initWithFrame:CGRectMake(0,86,ScreenWidth,ScreenHeight-86) style:UITableViewStyleGrouped];
     
     self.mtableView.delegate=self;

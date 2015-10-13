@@ -12,6 +12,7 @@
 #import "DDLog.h"
 #import "ArisChattingStyleSettingViewController.h"
 #import "ArisProfileSettingViewController.h"
+#import "ArisAppInfoController.h"
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
@@ -26,6 +27,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 @property (nonatomic,strong) ArisChattingStyleSettingViewController *cssvc;
 @property (nonatomic,strong) ArisProfileSettingViewController *psvc;
+@property (nonatomic,strong) ArisAppInfoController *apinfovc;
 @property (nonatomic,strong) UITableView *mtableView;
 @property (nonatomic,strong) UITableViewCell *profile;
 @property (nonatomic,strong) UITableViewCell *chattingStyle;
@@ -45,8 +47,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.view.backgroundColor=[UIColor whiteColor];
     
     //Add setting label
     UILabel *settingLabel = [[UILabel alloc] initWithFrame:CGRectMake((ScreenWidth-70)/2,25,70,86)];
@@ -223,7 +223,14 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         case 2:
             switch(indexPath.row)
         {
-            case 0: ;     // section 2, row 0 is chatting style
+            case 0:        // section 2, row 0 is chatting style
+                NSLog(@"section 2 row 0 selected");
+                if(self.apinfovc){
+                    self.apinfovc = nil;
+                }
+                self.apinfovc = [[ArisAppInfoController alloc] init];
+                [self.navigationController pushViewController:self.apinfovc animated:YES];
+                
         }
             break;
     }

@@ -9,12 +9,12 @@
 #import "SendView.h"
 #import "ContentButton.h"
 #import "Grid.h"
+#import "ArisConversationViewController.h"
 
 
 @interface SendView()
 @property (nonatomic,strong)  NSArray *contentButtons;
 @property (nonatomic,strong)  NSMutableArray *finishedButtons;
-
 
 @end
 
@@ -32,7 +32,7 @@ const int INITIAL_CONTENT_NUMBER = 4;
     if(!self.contentButtons){
         self.contentButtons = [[NSUserDefaults standardUserDefaults] valueForKey:@"Image_Contents"];
         if(!self.contentButtons){
-            self.contentButtons = @[@"eat",@"home",@"drink",@"work"];
+            self.contentButtons = @[@"eat",@"home",@"yes",@"no"];
         }
     }
     self.backgroundColor = nil;
@@ -52,7 +52,6 @@ const int INITIAL_CONTENT_NUMBER = 4;
     for (int i=0; i<grid.rowCount; i++){
         for(int j=0;j<grid.columnCount;j++){
             CGRect rect = [grid frameOfCellAtRow:i inColumn:j];
-            
             UIButton *newButton = [[ContentButton alloc]initWithFrame:CGRectInset(rect, self.frame.size.width/4*0.06, self.frame.size.width/4*0.06)];
             [newButton addTarget:self.conversationViewController action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
             [self.finishedButtons addObject:newButton];

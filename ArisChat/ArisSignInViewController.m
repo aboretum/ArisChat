@@ -126,10 +126,11 @@
     }
     else
     {
+        [ArisHelper createUserREST:self.jidField.text password:self.passwordField.text name:self.jidField.text email:nil];
         KeychainItemWrapper* keychain = [[KeychainItemWrapper alloc] initWithIdentifier:@"ArisCHAT" accessGroup:nil];
         NSString *jid = [NSString stringWithFormat:@"%@@%@",self.jidField.text,kXMPPServer];
         [[NSUserDefaults standardUserDefaults] setValue:jid forKey:kXMPPmyJID];
-        [[NSUserDefaults standardUserDefaults]  synchronize];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         [keychain setObject:self.passwordField.text forKey:(__bridge id)kSecValueData];
         [self.navigationController popToRootViewControllerAnimated:NO];
         [self.delegate credentialsStored];
